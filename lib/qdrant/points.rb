@@ -46,7 +46,9 @@ module Qdrant
     # Delete points
     def delete(
       collection_name:,
-      points:, wait: nil,
+      points: nil, 
+      filter: nil,
+      wait: nil,
       ordering: nil
     )
       response = client.connection.post("collections/#{collection_name}/#{PATH}/delete") do |req|
@@ -54,7 +56,8 @@ module Qdrant
         req.params["ordering"] = ordering unless ordering.nil?
 
         req.body = {}
-        req.body["points"] = points
+        req.body["points"] = points unless points.nil?
+        req.body["filter"] = filter unless filter.nil?
       end
       response.body
     end
